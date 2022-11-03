@@ -14,9 +14,73 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Bolões
 model Pool {
-  id String @id @default(cuid())
-  title String
-  code String @unique // código único
+  id        String   @id @default(cuid())
+  title     String
+  code      String   @unique // código único
   createdAt DateTime @default(now()) // data atual da criação do bolão
+  ownerId   String?
+
+  participants Participant[]
+
+  // O bolão sempre vai ter um owner (dono)
+  owner User? @relation(fields: [ownerId], references: [id])
+}
+
+// Participantes
+model Participant {
+  id     String @id @default(cuid())
+  userId String
+  poolId String
+
+  guesses Guess[]
+  user    User    @relation(fields: [userId], references: [id])
+  pool    Pool    @relation(fields: [poolId], references: [id]) // um participante sempre vai estar associado a um bolão
+
+  // Nessa tabela, esses dois valores serão únicos, ou seja, não vão se repetir
+  @@unique([userId, poolId])
+}
+
+// Usuários
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  avatarUrl String? // campo que pode estar vazio no banco de dados
+  createdAt DateTime @default(now())
+
+  // O usuário pode fazer parte de vários bolões através da tabela participant
+  participatingAt Participant[]
+  ownPools        Pool[] // bolões que o usuário é dono
+}
+
+// Jogos
+model Game {
+  id   String   @id @default(cuid())
+  date DateTime // data e hora dos jogos
+
+  // código do país para retornar o nome do país por completo
+  firstTeamCountryCode  String
+  secondTeamCountryCode String
+
+  // O jogo sempre vai ter vários palpites
+  guesses Guess[]
+}
+
+// Palpite
+model Guess {
+  id String @id @default(cuid())
+
+  firstTeamPoints  Int
+  secondTeamPoints Int
+  createdAt        DateTime @default(now())
+  gameId           String
+  participantId    String
+
+  // O palpite sempre vai ser feito por um participante
+  participant Participant @relation(fields: [participantId], references: [id])
+
+  // Um palpite sempre está associado a um jogo
+  game Game @relation(fields: [gameId], references: [id])
 }
