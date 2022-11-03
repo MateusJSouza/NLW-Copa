@@ -25,6 +25,18 @@ async function booststrap() {
     return { count }
   })
 
+  fastify.get('/users/count', async () => {
+    const count = await prisma.user.count()
+
+    return { count }
+  })
+
+  fastify.get('/guesses/count', async () => {
+    const count = await prisma.guess.count()
+
+    return { count }
+  })
+
   fastify.post('/pools', async (request, reply) => {
     // Validação com o zod
     const createPoolBody = z.object({
