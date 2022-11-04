@@ -1,6 +1,7 @@
 import { NativeBaseProvider, StatusBar } from 'native-base';
 import { useFonts, Roboto_400Regular, Roboto_500Medium, Roboto_700Bold } from '@expo-google-fonts/roboto';
 
+import { FindPool } from './src/screens/FindPool';
 import { Loading } from './src/components/Loading';
 import { SignIn } from './src/screens/SignIn';
 
