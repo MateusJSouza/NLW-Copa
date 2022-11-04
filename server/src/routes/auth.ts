@@ -1,9 +1,18 @@
 import { FastifyInstance } from "fastify"
 import { z } from "zod"
 import { prisma } from "../lib/prisma"
+import { authenticate } from "../plugins/authenticate"
 
 export async function authRoutes(fastify: FastifyInstance) {
-  fastify.post('users/', async (request) => {
+  fastify.get('/me', {
+    onRequest: [authenticate]
+  },
+    async (request) => {
+    // Retorna informações do usuário logado
+    return { user: request.user }
+  })
+
+  fastify.post('/users', async (request) => {
     const createUserBody = z.object({
       access_token: z.string()
     })
