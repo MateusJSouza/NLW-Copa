@@ -21,7 +21,7 @@ export default function App() {
           translucent
         />
 
-        {fontsLoaded ? <NewPool />  : <Loading />}
+        {fontsLoaded ? <FindPool />  : <Loading />}
       </AuthContextProvider>  
     </NativeBaseProvider>
   );
