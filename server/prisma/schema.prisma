@@ -44,6 +44,7 @@ model User {
   id        String   @id @default(cuid())
   name      String
   email     String   @unique
+  googleId  String?  @unique
   avatarUrl String? // campo que pode estar vazio no banco de dados
   createdAt DateTime @default(now())
 
