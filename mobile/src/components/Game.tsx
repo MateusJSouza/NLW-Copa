@@ -54,6 +54,7 @@ export function Game({ data, setFirstTeamPoints, setSecondTeamPoints, onGuessCon
           code={data.firstTeamCountryCode}
           position="right"
           onChangeText={setFirstTeamPoints}
+          value={String(data.guess?.firstTeamPoints || 0)}
         />
 
         <X color={colors.gray[300]} size={sizes[6]} />
@@ -62,6 +63,7 @@ export function Game({ data, setFirstTeamPoints, setSecondTeamPoints, onGuessCon
           code={data.secondTeamCountryCode}
           position="left"
           onChangeText={setSecondTeamPoints}
+          value={String(data.guess?.secondTeamPoints || 0)}
         />
       </HStack>
 
