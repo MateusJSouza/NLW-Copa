@@ -72,7 +72,12 @@ export function Pools() {
           <FlatList
             data={pools}
             keyExtractor={item => item.id}
-            renderItem={({ item }) => <PoolCard data={item} />}
+            renderItem={({ item }) => (
+              <PoolCard
+                data={item} 
+                onPress={() => navigate('details', { id: item.id })}
+              />
+            )}
             ListEmptyComponent={<EmptyPoolList />} // componente que será exibido caso a nossa lista estiver vazia
             showsVerticalScrollIndicator={false} // desabilitando barra de rolagem
             _contentContainerStyle={{ pb: 10, }} // paddingBottom
