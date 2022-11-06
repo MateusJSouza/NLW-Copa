@@ -28,7 +28,7 @@ export function Pools() {
       console.log(error);
 
       toast.show({
-        title: 'Não foi possível carregar os bolões',
+        title: 'Não foi possível carregar os bolões. Por favor, tente novamente!',
         placement: 'top',
         bgColor: 'red.500'
       })
