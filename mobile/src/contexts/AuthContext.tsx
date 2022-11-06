@@ -2,6 +2,7 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 import * as Google from 'expo-auth-session/providers/google'
 import * as AuthSession from 'expo-auth-session'
 import * as WebBrowser from 'expo-web-browser'
+import { api } from '../services/api'
 
 // Garantindo o redirecionamento do navegador
 WebBrowser.maybeCompleteAuthSession();
@@ -38,7 +39,18 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
   })
 
   async function signInWithGoogle(access_token: string) {
-    console.log('TOKEN DE AUTENTICAÇÃO ===>', access_token)
+    try {
+      setIsUserLoading(true);
+      const tokenResponse = await api.post('/users', { access_token })
+
+      console.log(tokenResponse.data)
+
+    } catch (err) {
+      console.log(err)
+      throw err;
+    } finally {
+      setIsUserLoading(false);
+    }
   }
   
   // Definição de função de signIn
@@ -56,6 +68,11 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
 
   // O useEffect é executado sempre que a resposta mudar
   useEffect(() => {
+    console.log("Google Response", {
+      responseType: response?.type,
+      authentication: response?.type === 'success' ? response?.authentication : null,
+    });    
+
     if (response?.type === 'success' && response.authentication?.accessToken) {
       signInWithGoogle(response.authentication.accessToken)
     }
