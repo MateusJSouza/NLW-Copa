@@ -1,11 +1,12 @@
 import { VStack, Icon, useToast, FlatList } from 'native-base';
 import { Octicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect } from '@react-navigation/native'
 
 import { Button } from '../components/Button';
 import { Header } from '../components/Header';
 import { api } from '../services/api';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Loading } from '../components/Loading'
 import { PoolCard, PoolCardProps } from '../components/PoolCard';
 import { EmptyPoolList } from '../components/EmptyPoolList';
@@ -36,9 +37,15 @@ export function Pools() {
     }
   }
 
-  useEffect(() => {
+  /*
+    useFocusEffect -> executa a função sempre que a interface receber o foco,
+    ou seja, que o usuário entrar na interface;
+    useCallback -> garante que a função não seja executava múltiplas vezes,
+    anotando a referência dessa função.
+  */
+  useFocusEffect(useCallback(() => {
     fetchPools();
-  }, [])
+  }, []))
 
   return (
     <VStack flex={1} bgColor="gray.900">
@@ -70,7 +77,7 @@ export function Pools() {
             showsVerticalScrollIndicator={false} // desabilitando barra de rolagem
             _contentContainerStyle={{ pb: 10, }} // paddingBottom
             px={5} // padding na horizontal
-          />   
+          />  
       }
 
       {/* <Loading /> */}
