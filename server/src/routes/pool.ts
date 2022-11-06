@@ -51,7 +51,7 @@ export async function poolRoutes(fastify: FastifyInstance) {
   })
 
   // :id -> é esperado uma informação dinâmica
-  fastify.post('/pools/:id/join',  {
+  fastify.post('/pools/join',  {
       onRequest: [authenticate]
     }, async (request, reply) => {
       const joinPoolBody = z.object({
@@ -110,5 +110,99 @@ export async function poolRoutes(fastify: FastifyInstance) {
 
       // Criação do novo recurso
       return reply.status(201).send()
+  })
+
+  fastify.get('/pools', {
+    onRequest: [authenticate]
+  }, async (request) => {
+    const pools = await prisma.pool.findMany({
+      where: {
+        participants: {
+          some: {
+            userId: request.user.sub,
+          }
+        }
+      },
+      // Incluindo mais informações na request
+      include: {
+        // Pegando a quantidade de participantes dentro do bolão
+        _count: {
+          select: {
+            participants: true
+          }
+        },
+        participants: {
+          // Selecionando o ID dos participantes e a avatarUrl
+          select: {
+            id: true,
+
+            user: {
+              select: {
+                avatarUrl: true,
+              }
+            }
+          },
+          // Quantos IDs eu quero pegar dos usuários
+          take: 4
+        },
+        owner: {
+          // Selecionando o id e o nome do criador do bolão
+          select: {
+            name: true,
+            id: true,
+          }
+        }
+      }
+    })
+
+    return { pools }
+  })
+
+  fastify.get('/pools/:id', {
+    onRequest: [authenticate]
+  }, async (request) => {
+    const getPoolParams = z.object({
+      id: z.string(),
+    })
+
+    const { id } = getPoolParams.parse(request.params)
+
+    const pool = await prisma.pool.findUnique({
+      where: {
+        id,
+      },
+      // Incluindo mais informações na request
+      include: {
+        // Pegando a quantidade de participantes dentro do bolão
+        _count: {
+          select: {
+            participants: true
+          }
+        },
+        participants: {
+          // Selecionando o ID dos participantes e a avatarUrl
+          select: {
+            id: true,
+
+            user: {
+              select: {
+                avatarUrl: true,
+              }
+            }
+          },
+          // Quantos IDs eu quero pegar dos usuários
+          take: 4
+        },
+        owner: {
+          // Selecionando o id e o nome do criador do bolão
+          select: {
+            name: true,
+            id: true,
+          }
+        }
+      }
+    })
+
+    return { pool }
   })
 }
