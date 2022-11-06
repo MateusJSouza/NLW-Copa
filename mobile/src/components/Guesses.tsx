@@ -8,6 +8,7 @@ interface Props {
 
 export function Guesses({ poolId }: Props) {
   const [isLoading, setIsLoading] = useState(false);
+  const [games, setGames] = useState([]);
   const toast = useToast();
 
   async function fetchGames() {
