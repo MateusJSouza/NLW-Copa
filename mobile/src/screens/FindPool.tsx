@@ -15,19 +15,19 @@ export function FindPool() {
   const toast = useToast()
 
   async function handleJoinPool() {
+
+    if (!code.trim()) {
+      return toast.show({
+        title: 'Informe o código',
+        placement: 'top',
+        bgColor: 'red.500',
+      })
+    }
+    
     try {
       setIsLoading(true);
 
-      if (!code.trim()) {
-        return toast.show({
-          title: 'Informe o código',
-          placement: 'top',
-          bgColor: 'red.500',
-        })
-      }
-
       await api.post('/pools/join', { code })
-      navigate('pools')
       
       toast.show({
         title: 'Você entrou no bolão com sucesso!',
@@ -36,11 +36,9 @@ export function FindPool() {
       })
       
       setCode('')
-
+      navigate('pools')
+      
     } catch (error) {
-      console.log(error);
-      setIsLoading(false);
-
       if (error.response?.data?.message === 'Pool not found.') {
         return toast.show({
           title: 'Bolão não encontrado!',
@@ -56,6 +54,8 @@ export function FindPool() {
           bgColor: 'red.500'
         })
       }
+    } finally {
+      setIsLoading(false);
     }
   }
 
