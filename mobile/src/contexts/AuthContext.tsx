@@ -68,11 +68,6 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
 
   // O useEffect é executado sempre que a resposta mudar
   useEffect(() => {
-    console.log("Google Response", {
-      responseType: response?.type,
-      authentication: response?.type === 'success' ? response?.authentication : null,
-    });    
-
     if (response?.type === 'success' && response.authentication?.accessToken) {
       signInWithGoogle(response.authentication.accessToken)
     }
