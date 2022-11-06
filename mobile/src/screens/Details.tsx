@@ -52,7 +52,7 @@ export function Details() {
       bgColor="gray.900"
     >
       <Header
-        title={id}
+        title={poolDetails.title}
         showBackButton
         showShareButton
       />
