@@ -42,8 +42,10 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
     try {
       setIsUserLoading(true);
       const tokenResponse = await api.post('/users', { access_token })
+      api.defaults.headers.common['Authorization'] = `Bearer ${tokenResponse.data.token}`;
 
-      console.log(tokenResponse.data)
+      const userInfoResponse = await api.get('/me');
+      setUser(userInfoResponse.data.user)
 
     } catch (err) {
       console.log(err)
@@ -68,6 +70,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
 
   // O useEffect é executado sempre que a resposta mudar
   useEffect(() => {
+
     if (response?.type === 'success' && response.authentication?.accessToken) {
       signInWithGoogle(response.authentication.accessToken)
     }
