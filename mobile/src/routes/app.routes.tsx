@@ -5,6 +5,7 @@ import { Platform } from 'react-native';
 
 import { NewPool } from '../screens/NewPool';
 import { Pools } from '../screens/Pools';
+import { FindPool } from '../screens/FindPool';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -50,6 +51,12 @@ export function AppRoutes() {
           tabBarIcon: ({ color }) => <SoccerBall color={color} size={size} />,
           tabBarLabel: 'Meus bolões',
         }}
+      />
+
+      <Screen
+        name="find"
+        component={FindPool}
+        options={{ tabBarButton: () => null }}
       />
     </Navigator>
   )
