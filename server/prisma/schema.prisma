@@ -81,4 +81,6 @@ model Guess {
 
   // Um palpite sempre está associado a um jogo
   game Game @relation(fields: [gameId], references: [id])
+
+  @@unique([participantId, gameId])
 }
